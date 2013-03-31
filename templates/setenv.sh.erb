@@ -1,0 +1,29 @@
+# -*- bash -*-
+
+### THIS FILE IS MANAGED BY PUPPET
+### DO NOT MODIFY IF YOU KNOW WHAT'S GOOD FOR YOU
+
+## sourced from catalina.sh
+
+## prevents brain-dead apps from leaving turds in the pwd
+cd "<%= catalina_base %>/logs"
+
+## additional classpath elements
+<% classpath.each do |cp| -%>
+CLASSPATH="${CLASSPATH}:<%= catalina_base + '/' + cp %>"
+<% end -%>
+
+CATALINA_OPTS="-server" 
+
+## memory tuning
+CATALINA_OPTS="${CATALINA_OPTS} -Xms<%= initial_heap %>M"
+CATALINA_OPTS="${CATALINA_OPTS} -Xmx<%= max_heap %>M"
+CATALINA_OPTS="${CATALINA_OPTS} -XX:MaxPermSize=<%= max_perm_gen %>M"
+
+## enable JMX if PORT_JMX is provided
+# if [ -n "${PORT_JMX}" ]; then
+#     CATALINA_OPTS="${CATALINA_OPTS} -Dcom.sun.management.jmxremote"
+#     CATALINA_OPTS="${CATALINA_OPTS} -Dcom.sun.management.jmxremote.port=${PORT_JMX}"
+#     CATALINA_OPTS="${CATALINA_OPTS} -Dcom.sun.management.jmxremote.ssl=false"
+#     CATALINA_OPTS="${CATALINA_OPTS} -Dcom.sun.management.jmxremote.authenticate=false"
+# fi
